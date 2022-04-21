@@ -90,3 +90,45 @@ func inorderTraversal(root *TreeNode) []int {
 	}
 	return res
 }
+
+//145. 二叉树的后序遍历【简单】
+//方法：递归
+func postorderRecursive(root *TreeNode) []int {
+	var res []int
+	var recursive func(node *TreeNode)
+	recursive = func(node *TreeNode) {
+		if node != nil {
+			recursive(node.Left)
+			recursive(node.Right)
+			res = append(res, node.Val)
+		}
+	}
+	recursive(root)
+	return res
+}
+
+//方法：遍历
+func postorderTraversal(root *TreeNode) []int {
+	var res []int
+	if root != nil {
+		var nodes = []*TreeNode{root}
+		for len(nodes) > 0 {
+			node := nodes[len(nodes)-1]
+			if node != nil {
+				if node.Right != nil {
+					nodes = append(nodes, node.Right)
+					node.Right = nil
+					continue
+				}
+				if node.Left != nil {
+					nodes = append(nodes, node.Left)
+					node.Left = nil
+					continue
+				}
+				res = append(res, node.Val)
+				nodes = nodes[:len(nodes)-1]
+			}
+		}
+	}
+	return res
+}
