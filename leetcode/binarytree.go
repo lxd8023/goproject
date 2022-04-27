@@ -179,3 +179,41 @@ func hasPathSum(root *TreeNode, targetSum int) bool {
 	}
 	return resursive(root, targetSum)
 }
+
+//106. 从中序与后序遍历序列构造二叉树【中等】
+func buildTree1(inorder []int, postorder []int) *TreeNode {
+	if len(inorder) <= 0 {
+		return nil
+	}
+	val := postorder[len(postorder)-1]
+	index := 0
+	for inorder[index] != val {
+		index++
+	}
+	node := &TreeNode{
+		Val: val,
+	}
+	node.Left = buildTree1(inorder[:index], postorder[:index])
+	node.Right = buildTree1(inorder[index+1:], postorder[index:len(postorder)-1])
+
+	return node
+}
+
+//105. 从前序与中序遍历序列构造二叉树【中等】
+func buildTree2(preorder []int, inorder []int) *TreeNode {
+	if len(inorder) <= 0 {
+		return nil
+	}
+	val := preorder[0]
+	index := 0
+	for inorder[index] != val {
+		index++
+	}
+	node := &TreeNode{
+		Val: val,
+	}
+
+	node.Left = buildTree2(preorder[1:index+1], inorder[:index])
+	node.Right = buildTree2(preorder[index+1:], inorder[index+1:])
+	return node
+}
