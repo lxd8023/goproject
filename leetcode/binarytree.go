@@ -132,3 +132,50 @@ func postorderTraversal(root *TreeNode) []int {
 	}
 	return res
 }
+
+//104. 二叉树的最大深度【简单】
+func maxDepth(root *TreeNode) int {
+	var res int
+	var recursive func(node *TreeNode, n int)
+	recursive = func(node *TreeNode, n int) {
+		if node != nil {
+			if n > res {
+				res = n
+			}
+			recursive(node.Left, n+1)
+			recursive(node.Right, n+1)
+		}
+	}
+	recursive(root, res+1)
+	return res
+}
+
+//101. 对称二叉树【简单】
+func isSymmetric(root *TreeNode) bool {
+	var recursive func(left *TreeNode, right *TreeNode) bool
+	recursive = func(left *TreeNode, right *TreeNode) bool {
+		if left == nil && right == nil {
+			return true
+		}
+		if right == nil || left == nil {
+			return false
+		}
+		return left.Val == right.Val && recursive(left.Left, right.Right) && recursive(left.Right, right.Left)
+	}
+	return recursive(root.Left, root.Right)
+}
+
+//112. 路径总和【简单】
+func hasPathSum(root *TreeNode, targetSum int) bool {
+	var resursive func(node *TreeNode, n int) bool
+	resursive = func(node *TreeNode, n int) bool {
+		if node == nil {
+			return false
+		}
+		if node.Left == nil && node.Right == nil && node.Val == n {
+			return true
+		}
+		return resursive(node.Left, n-node.Val) || resursive(node.Right, n-node.Val)
+	}
+	return resursive(root, targetSum)
+}
