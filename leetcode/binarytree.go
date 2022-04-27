@@ -217,3 +217,50 @@ func buildTree2(preorder []int, inorder []int) *TreeNode {
 	node.Right = buildTree2(preorder[index+1:], inorder[index+1:])
 	return node
 }
+
+//116. 填充每个节点的下一个右侧节点指针【中等】
+//117. 填充每个节点的下一个右侧节点指针 II【中等】
+func connect(root *Node) *Node {
+	if root != nil {
+		var nodes = []*Node{root.Left, root.Right}
+		for len(nodes) > 0 {
+			count := len(nodes)
+			for i := 0; i < count; i++ {
+				if nodes[i] != nil {
+					if i < count-1 {
+						nodes[i].Next = nodes[i+1]
+					}
+					if nodes[i].Left != nil {
+						nodes = append(nodes, nodes[i].Left)
+					}
+					if nodes[i].Right != nil {
+						nodes = append(nodes, nodes[i].Right)
+					}
+				}
+			}
+			nodes = nodes[count:]
+		}
+	}
+	return root
+}
+
+//236. 二叉树的最近公共祖先【中等 】
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	var resursive func(node, n, m *TreeNode) *TreeNode
+	resursive = func(node, n, m *TreeNode) *TreeNode {
+		if node != nil && node != n && node != q {
+			left := resursive(node.Left, n, m)
+			right := resursive(node.Right, n, m)
+
+			if left == nil {
+				return right
+			}
+			if right == nil {
+				return left
+			}
+		}
+		return node
+	}
+
+	return resursive(root, p, q)
+}
