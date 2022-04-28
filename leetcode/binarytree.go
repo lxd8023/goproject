@@ -264,3 +264,59 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 
 	return resursive(root, p, q)
 }
+
+//98. 验证二叉搜索树【中等】
+func isValidBST(root *TreeNode) bool {
+	var recursive func(node *TreeNode, min *TreeNode, max *TreeNode) bool
+	recursive = func(node *TreeNode, min *TreeNode, max *TreeNode) bool {
+		if node != nil {
+			if min != nil && node.Val <= min.Val {
+				return false
+			}
+			if max != nil && node.Val >= max.Val {
+				return false
+			}
+			return recursive(node.Left, min, node) && recursive(node.Right, node, max)
+		}
+		return true
+	}
+	return recursive(root.Left, nil, root) && recursive(root.Right, root, nil)
+}
+
+//173. 二叉搜索树迭代器【中等】
+type BSTIterator struct {
+	Current int
+	Length  int
+	Nums    []int
+}
+
+func Constructor(root *TreeNode) BSTIterator {
+	var res BSTIterator
+	nodes := []*TreeNode{root}
+	for len(nodes) > 0 {
+		node := nodes[len(nodes)-1]
+		if node.Left != nil {
+			nodes = append(nodes, node.Left)
+			node.Left = nil
+			continue
+		}
+		res.Nums = append(res.Nums, node.Val)
+		nodes = nodes[:len(nodes)-1]
+		if node.Right != nil {
+			nodes = append(nodes, node.Right)
+		}
+	}
+	res.Length = len(res.Nums)
+	res.Current = -1
+	return res
+}
+
+func (this *BSTIterator) Next() int {
+	res := this.Nums[this.Current]
+	this.Current++
+	return res
+}
+
+func (this *BSTIterator) HasNext() bool {
+	return this.Current < this.Length
+}

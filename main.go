@@ -1,7 +1,7 @@
 package main
 
 func main() {
+	cu := 0
 	nums := []int{1, 2, 3, 4}
-	nums = nums[1:3]
-	println(len(nums))
+	println(nums[cu])
 }
