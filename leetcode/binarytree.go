@@ -320,3 +320,65 @@ func (this *BSTIterator) Next() int {
 func (this *BSTIterator) HasNext() bool {
 	return this.Current < this.Length
 }
+
+//700. 二叉搜索树中的搜索【简单】
+func searchBST(root *TreeNode, val int) *TreeNode {
+	if root != nil {
+		if root.Val == val {
+			return root
+		}
+		if root.Val > val {
+			return searchBST(root.Left, val)
+		} else {
+			return searchBST(root.Right, val)
+		}
+	}
+	return root
+}
+
+//701. 二叉搜索树中的插入操作【中等】
+func insertIntoBST(root *TreeNode, val int) *TreeNode {
+	if root == nil {
+		return &TreeNode{
+			Val: val,
+		}
+	}
+	if root.Val > val {
+		root.Left = insertIntoBST(root.Left, val)
+	} else {
+		root.Right = insertIntoBST(root.Right, val)
+	}
+	return root
+}
+
+//450. 删除二叉搜索树中的节点【中等】
+func deleteNode(root *TreeNode, key int) *TreeNode {
+	var getMin func(node *TreeNode) *TreeNode
+	getMin = func(node *TreeNode) *TreeNode {
+		for node.Left != nil {
+			node = node.Left
+		}
+		return node
+	}
+	if root != nil {
+		if root.Val == key {
+			if root.Left == nil {
+				return root.Right
+			}
+			if root.Right == nil {
+				return root.Left
+			}
+			node := getMin(root.Right)
+			root.Right = deleteNode(root.Right, node.Val)
+			root.Val = node.Val
+
+			return root
+		}
+		if root.Val > key {
+			root.Left = deleteNode(root.Left, key)
+		} else {
+			root.Right = deleteNode(root.Right, key)
+		}
+	}
+	return root
+}
